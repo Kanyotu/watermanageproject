@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="—Pngtree—water tap icon for your_4852220.png">
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+
+    }
+    body {
+        /* background-image: url('image1.jpg');
+        background-repeat: no-repeat;
+        background-size: cover; */
+        background-color: #a1b7b4;
+    }
+
+    .headi{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1c8aba; 
+        padding: 20px;
+        position: sticky;
+        top: 0;
+    }
+    .nav{
+        
+        position: relative;
+        right: 0;
+        /* padding: 0%;
+        margin: 0%; */
+        height: 100%;
+        /* width: 30%; */
+        
+    }
+    .nav a{
+        /* margin: 0 10px; */
+        color: white;
+        text-decoration: none;
+        width : fit-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+        height: 100%;
+        text-align: center;
+        border-radius: 5px;
+        border: solid 1px #000000;
+        
+    }
+    .nav a:hover{
+        color: rgb(188, 234, 239);
+        background-color: rgb(30, 86, 124);
+    }
+    #logout{
+        background-color: red;
+        border-radius: 7px;
+    }
+    @media (max-width: 1100px){
+        .headi{
+            flex-direction: column;
+
+        }
+        .nav{
+            width: 100%;
+            /* display:grid; */
+            padding: 5px;
+           
+        }
+        .nav a{
+            width: 100%;
+            padding: 3px 2px;
+            margin: 2px;
+        }
+    }
+
+</style>
+<body>
+    <header class="headi" >
+        <h1>Kanyo water services</h1>
+        <div class="nav">
+            <a href="index.php">Home</a>
+            <a href="addmanager.php">Add manager</a>
+            <a href="removemanager.php">Removemanager</a>
+            <a href="adddepartment.php">Add department</a>
+            <a href="removedepartment.php">Remove department</a>
+            <a href="addpump.php">addpump</a>
+            <a href="addnetwork.php">add network</a>
+            <a href="profile.php">Profile</a>
+            <a href="logout.php" id="logout">Logout</a>
+            
+        </div>
+     
+     
+    </header>
+</body>
+</html>
