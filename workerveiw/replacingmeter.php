@@ -42,15 +42,15 @@ if( $_SERVER["REQUEST_METHOD"] == "POST"){
     if(!$row){
         die("!!Error: customer does not exist");
     }
-    $customer_id = $row['customer_id'];
+    $meter_id = $row['meter_id'];
     
 
-    $sql = " UPDATE meters SET meterno  = ? WHERE customer_id = ? ";
+    $sql = " UPDATE meters SET meterno  = ? WHERE meter_id = ? ";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         die("Error: " . $conn->error);
     }
-    $stmt->bind_param("ii",$newmeterno,$customer_id);
+    $stmt->bind_param("ii",$newmeterno,$meter_id);
     if (!$stmt->execute()) {
         die( "Error: " . $stmt->error);
     }

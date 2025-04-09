@@ -41,20 +41,26 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
    }
    $result = $stmt->get_result();
    $row = $result->fetch_assoc();
-   $userid= $row ["customer_id"] ;
+   $meterid= $row ["meter_id"] ;
 
 
-   $sql='DELETE FROM meter WHERE consumerid = ?';
+   $sql='DELETE FROM meter WHERE meter_id = ?';
    $stmt = $conn->prepare($sql);
    if (!$stmt){
     echo "Error: " . $conn->error;
    }
-   $stmt->bind_param("i", $userid);
+   $stmt->bind_param("i", $meterid);
    if( !$stmt->execute()){
     echo "Error: " . $stmt->error;
    }
-   header("index.php");
-   echo "Meter deleted successfully";
+   header("Refresh: 2; url=index.php");
+
+                    // Then output your content
+    echo '<script>alert("meter deleted successfully");</script>';
+    echo "Redirecting to home page in 2 seconds...";
+    exit();
+                  
+                                  
 
    $stmt->close();
    $conn->close();

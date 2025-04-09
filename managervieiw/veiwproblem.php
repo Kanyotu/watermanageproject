@@ -55,8 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         die("Error executing query: " . $stmt->error);
     }
 
-    echo "Problem selected successfully";
-    header("location:index.php");
+    header("refresh:2; url=index.php");
+    echo "<script>alert('Problem selected successfully');</script>";
+    echo "Redirecting to home page in 2 seconds...";
     exit();
 }
 
@@ -117,5 +118,46 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </table><br>
 
     <h2>Problems written by workers</h2>
+    <table>
+    <tr>
+        <th> Worker ID</th>
+        <th> Date Filed</th>
+        <th> Issue</th>
+        <th> Description</th>
+        <th>inactive device no</th>
+        <th> Select</th>
+    </tr>
+
+
+    <?php
+    $sql = "SELECT * FROM workerproblems where pstatus != 'active' and pstatus != 'done'";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        die("Error preparing statement: " . $conn->error);
+    }
+    if (!$stmt->execute()) {
+        die("Error executing query: " . $stmt->error);
+    }
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) : ?>
+    <tr>
+        <td><?= htmlspecialchars($row['workerid']) ?></td>
+        <td><?= htmlspecialchars($row['dateadded']) ?></td>
+        <td><?= htmlspecialchars($row['ptype']) ?></td>
+        <td><?= htmlspecialchars($row['pdescription']) ?></td>
+        <td> <?htmlspecialchars($row ['pnonnatno'])?></td>
+        <td>
+            <form action="veiwworkerprob.php" method="post">
+                <input type="hidden" name="problemid" value="<?= htmlspecialchars($row['problemid']) ?>">
+                <input type="submit" value="Select Problem">
+            </form>
+        </td>
+    </tr>
+    <?php endwhile; ?>
+    </table>
+    <br>
+    <a href="index.php">Back to Home</a>
+
+
 </body>
 </html>

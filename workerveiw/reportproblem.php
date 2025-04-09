@@ -1,7 +1,6 @@
 <?php
 
-use function PHPSTORM_META\type;
-
+// use function PHPSTORM_META\type;
 session_start();
 include("headerafterlogin.html");
 include("database.php");
@@ -25,7 +24,7 @@ if(!$stmt ->execute()){
 }
 $result = $stmt->get_result();
 
-if($resultu->num_rows == 0){
+if($result->num_rows == 0){
     header("location:login.php");
     exit();
 }
@@ -33,14 +32,14 @@ $row = $result->fetch_assoc();
 $workerid = $row["worker_id"];
 
 
-if($_SERVER["REQUEST_METHOD"]="POST"){
+if($_SERVER["REQUEST_METHOD"]=="POST"){
     $type = filter_var($_POST["type"],FILTER_SANITIZE_SPECIAL_CHARS);
     $description = filter_var($_POST["description"],FILTER_SANITIZE_SPECIAL_CHARS);
     $problem = "";
     $pumpnumber = 0;
     $networkname = "";
     $tankno = 0;
-    $pnonnatno = "";
+    $pnonnatno = null;
     $pstatus = "pending";
 
     if($type == "3"){

@@ -2,6 +2,9 @@
 include("database.php");
 include("headerafterlogin.html");
 session_start();
+
+
+// Check if user is logged in
 if(!isset($_SESSION['username'])){
     header("location:login.php");
     exit;
@@ -23,6 +26,8 @@ if($stmt->get_result()->num_rows == 0){
     header("location:login.php");
     exit();
 }
+
+
 
 if ($_SERVER['REQUEST_METHOD']=="POST"){
     $meterno = filter_var($_POST['meterno'],FILTER_SANITIZE_SPECIAL_CHARS);
@@ -80,15 +85,48 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
     $networkid = $row['netid'];
 
     // inserting data into the meter table
-    $sql = "INSERT INTO meter (meterno, installationdate, mstatus, lastmeterreading, networkid, consumerid) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO meter (meterno, installationdate, mstatus, lastmeterreading, networkid) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if(!$stmt){
         echo " INSERTING METER DATA Error: unable to prepare SQL statement: " . $conn->error;
         }
-    $stmt->bind_param("sssdii", $meterno, $installdate, $status, $lastmeterreading, $networkid, $consumerid);
+    $stmt->bind_param("sssdi", $meterno, $installdate, $status, $lastmeterreading, $networkid);
     if( !$stmt->execute()){
         echo "AFTER BINDING ALL DATA Error: unable to execute SQL statement: " . $stmt->error;
         }
+
+
+    //getting the meter id from the database table meter
+    $sql = "SELECT FROM meter WHERE meterno = ?";
+    $stmt = $conn->prepare($sql);
+    if(!$stmt){
+        echo "GETTING METER ID Error: unable to prepare SQL statement: " . $conn->error;
+        }
+    $stmt->bind_param("s",$meterno);
+    if(!$stmt->execute()){
+        echo "AFTER BINDING METERNO Error: unable to execute SQL statement: " . $stmt->error;
+        }
+    $result = $stmt->get_result();
+    if ($result->num_rows == 0){
+        echo"invalid meter number";
+    }
+    $row = $result->fetch_assoc();
+    $meterid = $row['meter_id'];
+
+
+
+    //updating the customer table with the meter id
+    $sql = "UPDATE customers SET meter_id = ? WHERE customer_id = ?";
+    $stmt = $conn->prepare($sql);
+    if(!$stmt){
+        echo "UPDATING CUSTOMER TABLE Error: unable to prepare SQL statement: " . $conn->error;
+        }
+    $stmt->bind_param("ii",$meterid,$consumerid);
+    if(!$stmt->execute()){
+        echo "AFTER BINDING CUSTOMER ID Error: unable to execute SQL statement: " . $stmt->error;
+        }
+    header("Refresh: 2; url=index.php");
+    echo '<script>alert("meter added successfully");</script>';
     $stmt-> close();
     $conn->close();
 
@@ -176,8 +214,8 @@ if ($_SERVER['REQUEST_METHOD']=="POST"){
     <input type="number" name="lastmeterreading" required><br>
     <label for="networkname">network name:</label><br>
     <input type="text" name="networkname" required><br>
-    <label for="consumername">consumername</label><br>
-    <input type="text" name="consumername" required><br>
+    <label for="consumername ">consumername</label><br>
+    <input type="text" name="consumername" value="<?php echo $_SESSION['customername'] ?>" readonly><br>
     <input type="submit" value="submit">
     </form>
     </div>
